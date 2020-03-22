@@ -127,3 +127,34 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+
+# OS generated files #
+**/.DS_Store
+**/.DS_Store?
+**/._*
+**/.Spotlight-V100
+**/.Trashes
+**/ehthumbs.db
+**/Thumbs.db
+*~
+
+# Mac OS X
+# Xcode
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.xcuserstate
+project.xcuserdata/
+xcworkspace/
+
+
+# Media Files
+*.wav
+*.aiff
+*.mp3
+*.mp4
+*.m4a
+*.flac
+*.avi
