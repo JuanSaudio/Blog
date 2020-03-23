@@ -148,6 +148,7 @@ dmypy.json
 *.xcuserstate
 project.xcuserdata/
 xcworkspace/
+**/Builds/**
 
 
 # Media Files
