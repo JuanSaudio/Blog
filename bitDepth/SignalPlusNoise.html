@@ -13245,7 +13245,6 @@ div#notebook {
     <span class="n">curTitle</span> <span class="o">=</span> <span class="s1">&#39;Signal + Noise - SNR: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">signalLevel</span> <span class="o">-</span> <span class="n">noiseLevel</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">curTitle</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">autoscale</span><span class="p">(</span><span class="n">tight</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="o">-</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">])</span>
     
 <span class="n">widgets</span><span class="o">.</span><span class="n">interactive</span><span class="p">(</span><span class="n">plot</span><span class="p">,</span> <span class="n">signalLevel</span><span class="o">=</span><span class="n">signalLevelSlider</span><span class="p">,</span> <span class="n">noiseLevel</span><span class="o">=</span><span class="n">noiseLevelSlider</span><span class="p">)</span>
 </pre></div>
