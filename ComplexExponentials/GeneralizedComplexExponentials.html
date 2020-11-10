@@ -3,7 +3,7 @@
 <head><meta charset="utf-8" />
 
 
-<title>SquareSinusoidSpectrum</title>
+<title>GeneralizedComplexExponentials</title>
 
 <style type="text/css">
     /*!
@@ -13143,10 +13143,11 @@ div#notebook {
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># nbi:hide_in</span>
+<span class="c1"># Required libraries</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="kn">import</span> <span class="n">Axes3D</span>
 <span class="kn">import</span> <span class="nn">ipywidgets</span> <span class="k">as</span> <span class="nn">widgets</span>
-<span class="kn">import</span> <span class="nn">scipy.signal</span> <span class="k">as</span> <span class="nn">sg</span>
 <span class="o">%</span><span class="k">matplotlib</span> inline
 </pre></div>
 
@@ -13158,6 +13159,25 @@ div#notebook {
 
   
 
+  <div class="
+      cell border-box-sizing code_cell rendered">
+    <div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">fs</span> <span class="o">=</span> <span class="mi">96000</span>
+<span class="n">dur</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">dur</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">dur</span> <span class="o">*</span> <span class="n">fs</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+  </div>
+
+  
+
   <div class="nbinteract-hide_in
       cell border-box-sizing code_cell rendered">
     <div class="input">
@@ -13165,14 +13185,60 @@ div#notebook {
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># nbi:hide_in</span>
-<span class="n">originalCheckbox</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Checkbox</span><span class="p">(</span>
-    <span class="n">value</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Original Signal&#39;</span><span class="p">,</span>
+
+<span class="c1"># freqSlider = widgets.FloatLogSlider (</span>
+<span class="c1">#     value=np.log10(1e3),</span>
+<span class="c1">#     base=10,</span>
+<span class="c1">#     min=np.log10(2e1), </span>
+<span class="c1">#     max=np.log10(2e4),</span>
+<span class="c1">#     step=0.2, </span>
+<span class="c1">#     continuous_update=True,</span>
+<span class="c1">#     readout_format=&#39;d&#39;</span>
+<span class="c1"># )</span>
+
+<span class="n">freqSlider</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">FloatSlider</span> <span class="p">(</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="nb">min</span><span class="o">=-</span><span class="mf">1000.0</span><span class="p">,</span>
+    <span class="nb">max</span><span class="o">=</span><span class="mf">1000.0</span><span class="p">,</span>
+    <span class="n">step</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">continuous_update</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">readout_format</span><span class="o">=</span><span class="s1">&#39;d&#39;</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="n">processedCheckbox</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Checkbox</span><span class="p">(</span>
-    <span class="n">value</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Squared Signal&#39;</span><span class="p">,</span>
+<span class="n">phaseSlider</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">FloatSlider</span> <span class="p">(</span>
+    <span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="nb">min</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="nb">max</span><span class="o">=</span><span class="mf">360.0</span><span class="p">,</span>
+    <span class="n">step</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">continuous_update</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">readout_format</span><span class="o">=</span><span class="s1">&#39;.1f&#39;</span> 
+<span class="p">)</span>
+
+<span class="n">sigmaSlider</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">FloatSlider</span> <span class="p">(</span>
+    <span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="nb">min</span><span class="o">=-</span><span class="mf">1000.0</span><span class="p">,</span>
+    <span class="nb">max</span><span class="o">=</span><span class="mf">1000.0</span><span class="p">,</span>
+    <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">continuous_update</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">readout_format</span><span class="o">=</span><span class="s1">&#39;.1f&#39;</span>
+<span class="p">)</span>
+
+<span class="n">azimuthSlider</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">FloatSlider</span> <span class="p">(</span>
+    <span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="nb">min</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="nb">max</span><span class="o">=</span><span class="mf">180.0</span><span class="p">,</span>
+    <span class="n">step</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">continuous_update</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">readout_format</span><span class="o">=</span><span class="s1">&#39;.1f&#39;</span> 
+<span class="p">)</span>
+
+<span class="n">elevationSlider</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">FloatSlider</span> <span class="p">(</span>
+    <span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="nb">min</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="nb">max</span><span class="o">=</span><span class="mf">90.0</span><span class="p">,</span>
+    <span class="n">step</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">continuous_update</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">readout_format</span><span class="o">=</span><span class="s1">&#39;.1f&#39;</span> 
 <span class="p">)</span>
 </pre></div>
 
@@ -13191,31 +13257,24 @@ div#notebook {
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># nbi:hide_in</span>
-<span class="n">fs</span> <span class="o">=</span> <span class="mi">40000</span>
-<span class="n">dur</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">dur</span><span class="p">,</span> <span class="n">dur</span> <span class="o">*</span> <span class="n">fs</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">sg</span><span class="o">.</span><span class="n">chirp</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="mf">2e1</span><span class="p">,</span> <span class="n">dur</span><span class="p">,</span> <span class="mf">2e4</span><span class="p">)</span>
 
-<span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span>
 
-<span class="n">fxx</span><span class="p">,</span> <span class="n">txx</span><span class="p">,</span> <span class="n">Sxx</span> <span class="o">=</span> <span class="n">sg</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="s1">&#39;spectrum&#39;</span><span class="p">,</span> <span class="n">nfft</span><span class="o">=</span><span class="mi">512</span><span class="p">)</span>
-<span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">Syy</span> <span class="o">=</span> <span class="n">sg</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="s1">&#39;spectrum&#39;</span><span class="p">,</span> <span class="n">nfft</span><span class="o">=</span><span class="mi">512</span><span class="p">)</span>
-<span class="n">Szz</span> <span class="o">=</span> <span class="n">Sxx</span> <span class="o">+</span> <span class="n">Syy</span><span class="p">;</span>
+<span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span> <span class="n">phase</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">az</span><span class="p">,</span> <span class="n">el</span><span class="p">):</span>
+    <span class="n">expOsc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">freq</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span>
+    <span class="n">expEnv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span> <span class="n">sigma</span><span class="p">);</span>
+    <span class="n">expAng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">phase</span><span class="p">));</span>
+    
+    <span class="n">expAll</span> <span class="o">=</span> <span class="n">expOsc</span> <span class="o">*</span> <span class="n">expEnv</span> <span class="o">*</span> <span class="n">expAng</span><span class="p">;</span>
+<span class="c1">#     fig = plt.figure(figsize=(18,8))</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figaspect</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mf">1.5</span><span class="p">)</span>
 
-<span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="n">showOriginal</span><span class="p">,</span> <span class="n">showProcessed</span><span class="p">):</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">showOriginal</span> <span class="ow">and</span> <span class="n">showProcessed</span><span class="p">:</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">txx</span><span class="p">,</span> <span class="n">fxx</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Szz</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">showOriginal</span><span class="p">:</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">txx</span><span class="p">,</span> <span class="n">fxx</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Sxx</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">showProcessed</span><span class="p">:</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">txx</span><span class="p">,</span> <span class="n">fxx</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Syy</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">txx</span><span class="p">,</span> <span class="n">fxx</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">Sxx</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">clim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
-        
-<span class="n">widgets</span><span class="o">.</span><span class="n">interactive</span><span class="p">(</span><span class="n">plot</span><span class="p">,</span> <span class="n">showOriginal</span><span class="o">=</span><span class="n">originalCheckbox</span><span class="p">,</span> <span class="n">showProcessed</span><span class="o">=</span><span class="n">processedCheckbox</span><span class="p">)</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">,</span> <span class="n">proj_type</span> <span class="o">=</span> <span class="s1">&#39;ortho&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">expAll</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">expAll</span><span class="p">));</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">el</span><span class="p">,</span> <span class="o">-</span><span class="n">az</span><span class="p">)</span>
+<span class="c1">#     ax.ylim([-max(np.abs(expAll)), max(np.abs(expAll))])</span>
+<span class="c1">#     ax.grid(True);</span>
+    
+<span class="n">widgets</span><span class="o">.</span><span class="n">interactive</span><span class="p">(</span><span class="n">plot</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="n">freqSlider</span><span class="p">,</span> <span class="n">phase</span><span class="o">=</span><span class="n">phaseSlider</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigmaSlider</span><span class="p">,</span> <span class="n">az</span><span class="o">=</span><span class="n">azimuthSlider</span><span class="p">,</span> <span class="n">el</span><span class="o">=</span><span class="n">elevationSlider</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -13240,6 +13299,23 @@ div#notebook {
 
 </div>
 
+</div>
+</div>
+
+  </div>
+
+  
+
+  <div class="
+      cell border-box-sizing code_cell rendered">
+    <div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span> 
+</pre></div>
+
+    </div>
 </div>
 </div>
 
