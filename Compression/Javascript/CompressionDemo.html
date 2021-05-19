@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF_8">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <link rel="stylesheet" href="CompressionDemo.css">
+</head>
+<body>
+    <div class="chart-container" style="position: relative; height:40vh; width:50vw">
+        <canvas id="timeChart"></canvas>
+    </div>
+
+    <div class="chart-container" style="position: relative; height:40vh; width:40vh">
+        <canvas id="charFunc"></canvas>
+    </div>
+    <script src="CompressionDemo.js"></script>
+
+    <div style="overflow: auto;width: 100%;">
+        <div style="width: 10%;float: left;"> Level Before: </div>
+        <div style="width: 90%;float: left;">
+            <input type="range" id="levelBefore" name="levelBeforeSlider" class="slider"
+            min="-40" max="0" step="1" value="-40"
+            onchange="setLevelBefore()"
+            oninput="this.nextElementSibling.value = this.value">
+            <output>0</output> dB
+        </div>
+
+        <div style="width: 10%;float: left;"> Level During: </div>
+        <div style="width: 90%;float: left;">
+            <input type="range" id="levelDuring" name="levelDuringSlider" class="slider"
+            min="-40" max="0" step="1" value="0"
+            onchange="setLevelDuring()"
+            oninput="this.nextElementSibling.value = this.value">
+            <output>0</output> dB
+        </div>
+
+        <div style="width: 10%;float: left;"> Level After: </div>
+        <div style="width: 90%;float: left;">
+            <input type="range" id="levelAfter" name="levelAfterSlider" class="slider"
+            min="-40" max="0" step="1" value="-40"
+            onchange="setLevelAfter()"
+            oninput="this.nextElementSibling.value = this.value">
+            <output>0</output> dB
+        </div>
+
+        <div style="width: 10%;float: left;"> Threshold: </div>
+        <div style="width: 90%;float: left;">
+            <input type="range" id="threshold" name="thresholdSlider" class="slider"
+            min="-20" max="0" step="1" value="0"
+            onchange="setThreshold()"
+            oninput="this.nextElementSibling.value = this.value">
+            <output>0</output> dB
+        </div>
+
+        <div style="width: 10%;float: left;"> Ratio: </div>
+        <div style="width: 90%;float: left;">
+            <input type="range" id="ratio" name="ratioSlider" class="slider"
+            min="1" max="10" step="0.5" value="1"
+            onchange="setRatio()"
+            oninput="this.nextElementSibling.value = this.value">
+            <output>1</output> : 1
+        </div>
+
+        <div style="width: 10%;float: left;"> Attack: </div>
+        <div style="width: 90%;float: left;">
+            <input type="range" id="attack" name="attackSlider" class="slider"
+            min="10" max="100" step="1" value="10"
+            onchange="setAttack()"
+            oninput="this.nextElementSibling.value = this.value">
+            <output>10</output> ms
+        </div>
+
+        <div style="width: 10%;float: left;"> Release: </div>
+        <div style="width: 90%;float: left;">
+            <input type="range" id="release" name="releaseSlider" class="slider"
+            min="10" max="1000" step="10" value="100"
+            onchange="setRelease()"
+            oninput="this.nextElementSibling.value = this.value">
+            <output>100</output> ms
+        </div>
+
+        <div style="width: 10%;float: left;"> Knee: </div>
+        <div style="width: 90%;float: left;">
+            <input type="range" id="knee" name="releaseSlider" class="slider"
+            min="0" max="10" step="1" value="0"
+            onchange="setKnee()"
+            oninput="this.nextElementSibling.value = this.value">
+            <output>0</output> dB
+        </div>
+
+        <div style="width: 10%;float: left;"> Feed Type: </div>
+        <div style="width: 90%;float: left;">
+            <select id="Feed" name="FeedDropDown" onchange="setFeedType()">
+                <option value="Feedforward">Feedforward</option>
+                <option value="Feedback">Feedback</option>
+            </select>
+        </div>
+
+        <div style="width: 10%;float: left;"> Detector Type: </div>
+        <div style="width: 90%;float: left;">
+            <select id="Detector" name="DetectorDropDown" onchange="setDetectorType()">
+                <option value="Coupled">Coupled</option>
+                <option value="Decoupled">Decoupled</option>
+                <option value="DecoupledSmooth">DecoupledSmooth</option>
+                <option value="Branched">Branched</option>
+                <option value="BranchedSmooth">BranchedSmooth</option>
+            </select>
+        </div>
+
+        <div style="width: 10%;float: left;"> Envelope Type: </div>
+        <div style="width: 90%;float: left;">
+            <select id="Envelope" name="EnvelopeDropDown" onchange="setEnvelopeType()">
+                <option value="Signal">Signal</option>
+                <option value="Gain">Gain</option>
+                <option value="GaindB">GaindB</option>
+            </select>
+        </div>
+
+        <div style="width: 10%;float: left;"> Biasing: </div>
+        <div style="width: 90%;float: left;">
+            <select id="Bias" name="BiasDropDown" onchange="setBiasType()">
+                <option value="NoBias">No Bias</option>
+                <option value="ToThreshold">To Threshold</option>
+            </select>
+        </div>
+
+        <div style="width: 10%;float: left;"> Signal Type: </div>
+        <div style="width: 90%;float: left;">
+            <select id="Signal" name="signalDropDown" onchange="setSignalType()">
+                <option value="dc">DC</option>
+                <option value="80Hz">80Hz</option>
+                <option value="Noise">Noise</option>
+            </select>
+        </div>
+    </div>
+</body>
+</html>
