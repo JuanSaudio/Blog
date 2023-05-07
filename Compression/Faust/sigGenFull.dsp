@@ -18,6 +18,6 @@ xo = dc, fs, sinusoid, noise : ba.selectn(4, sigType) with {
 env = (inGain - outGain) * envo + outGain;
 x = xo * env;
 
-outputFormatter(a) = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, trigger, a, 1;
+outputFormatter(a) = 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, trigger, a, 1;
 
 process = x : outputFormatter;

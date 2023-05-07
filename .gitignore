@@ -165,3 +165,6 @@ xcworkspace/
 
 # Logic Projects
 Logic/
+
+# Other program files
+*.featproj
