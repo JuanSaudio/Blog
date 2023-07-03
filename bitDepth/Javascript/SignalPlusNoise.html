@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF_8">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.0/dist/chart.umd.js"></script>
+    <link rel="stylesheet" href="Style.css">
+</head>
+
+<body>
+    <div class="chart-container" style="position: relative; height:50vh; width:50vw">
+        <canvas id="SignalPlusNoise"></canvas>
+    </div>
+    <script src="SignalPlusNoise.js"></script>
+
+    <div style="overflow: auto;width: 100%;">
+        <div style="width: 10%;float: left;"> Signal Level: </div>
+        <div style="width: 90%;float: left;">
+            <input type="range" id="signal" name="Signal Level" class="slider"
+            min="-60" max="0" step="1" value="0"
+            onchange="setSignalLevel()"
+            oninput="this.nextElementSibling.value = this.value">
+            <output>0</output> dB
+        </div>
+    </div>
+    <div style="overflow: auto;width: 100%;">
+        <div style="width: 10%;float: left;"> Noise Level: </div>
+        <div style="width: 90%;float: left;">
+            <input type="range" id="noise" name="Noise Level" class="slider"
+            min="-60" max="0" step="1" value="-20"
+            onchange="setNoiseLevel()"
+            oninput="this.nextElementSibling.value = this.value">
+            <output>-20</output> dB
+        </div>
+    </div>
+</body>
+</html>
